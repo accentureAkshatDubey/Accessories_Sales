@@ -1,0 +1,174 @@
+version: 0.0.10
+jobId: "736"
+jobName: Accessories Sales
+jobType: Source Aligned Data Product
+alias: Ingesting_data_into_athena
+discoveryPort:
+  name: Accessories Sales
+inputPorts:
+  - alias: PD_ISSUE_1
+    description: PD_ISSUE
+    tags: []
+    extra: {}
+    syncType: pull
+    type: s3-parquet
+    dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
+    filter: ""
+    projection: []
+    persistDataFrame: false
+    entity:
+      advanceOptions:
+        mergeSchema: true
+  - alias: PH_ENQ_1
+    description: PH_ENQ
+    tags: []
+    extra: {}
+    syncType: pull
+    type: s3-parquet
+    dataSetUrn: urn:dv:dataset:9e6f0763-1c4f-494f-bdbe-523a844d06f9
+    filter: ""
+    projection: []
+    persistDataFrame: false
+    entity:
+      advanceOptions:
+        mergeSchema: true
+  - alias: PD_ENQ_1
+    description: PD_ENQ
+    tags: []
+    extra: {}
+    syncType: pull
+    type: s3-parquet
+    dataSetUrn: urn:dv:dataset:7bf0bd5e-a850-4e34-8a8b-e8db98a05f33
+    filter: ""
+    projection: []
+    persistDataFrame: false
+    entity:
+      advanceOptions:
+        mergeSchema: true
+productState:
+  isDynamic: true
+  alias: Ingesting_data_into_athena
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      item_value:
+        type: STRING
+        description: item value
+      PD_ISSUE_PARENT_GROUP:
+        type: STRING
+        description: Parent group from pd issue
+      PD_ISSUE_DEALER_MAP_CD:
+        type: STRING
+        description: Dealer map code from pd issue
+      PD_ISSUE_LOC_CD:
+        type: STRING
+        description: location code from pd issue
+      PD_ISSUE_DOC_NUM:
+        type: STRING
+        description: Doc number from pd_issue
+      PD_ISSUE_PART_NUM:
+        type: STRING
+        description: Part number from pd issue
+      PD_ENQ_PARENT_GROUP:
+        type: STRING
+        description: Parent group from pd_enq
+      PD_ENQ_DEALER_MAP_CD:
+        type: STRING
+        description: Dealer map code from pd_enq
+      PD_ENQ_LOC_CD:
+        type: STRING
+        description: Location code from pd enq
+      PD_ENQ_INVOICE_NUM:
+        type: STRING
+        description: Invoice number from pd enq
+      PD_ENQ_part_num:
+        type: STRING
+        description: Part number from pd enq
+      PH_ENQ_PARENT_GROUP:
+        type: STRING
+        description: Parent group from ph enq
+      PH_ENQ_DEALER_MAP_CD:
+        type: STRING
+        description: Dealer Map Code from ph enq
+      PH_ENQ_LOC_CD:
+        type: STRING
+        description: Location code from ph enq
+      PH_ENQ_ENQ_NUM:
+        type: STRING
+        description: Enquiry number from ph enq
+      PH_ENQ_ENQ_SOURCE:
+        type: STRING
+        description: Enquiry source from ph_enq
+      PH_ENQ_CUST_REMARKS:
+        type: STRING
+        description: Customer remarks from ph enq
+      PH_ENQ_ENQ_MOD:
+        type: STRING
+        description: Enquiry mode from ph enq
+      PH_ENQ_INVOICE_NUM:
+        type: STRING
+        description: Invoice number from ph enq
+      PH_ENQ_INVOICE_DATE:
+        type: DATETIME
+        description: Invoice date from ph enq
+      PH_ENQ_ENQ_DATE:
+        type: DATETIME
+        description: Enquiry date from ph enq
+      PH_ENQ_CUST_STATE:
+        type: STRING
+        description: Customer state from ph enq
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_transformed_layer.Accessories_Sales
+  warehousePath: s3://dlp-platform-engine-bucket/
+  catalogName: glue
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: glue
+  refreshInterval: None
+transformation:
+  - alias: Spark_SQL_1
+    type: SQL
+    description: transformation logic for accessories sales
+    query: SELECT  c.item_value as item_value, c.PARENT_GROUP AS
+      PD_ISSUE_PARENT_GROUP, c.DEALER_MAP_CD AS PD_ISSUE_DEALER_MAP_CD, c.LOC_CD
+      AS PD_ISSUE_LOC_CD, c.DOC_NUM AS PD_ISSUE_DOC_NUM, c.PART_NUM AS
+      PD_ISSUE_PART_NUM, b.PARENT_GROUP AS PD_ENQ_PARENT_GROUP, b.DEALER_MAP_CD
+      AS PD_ENQ_DEALER_MAP_CD, b.LOC_CD AS PD_ENQ_LOC_CD, b.INVOICE_NUM AS
+      PD_ENQ_INVOICE_NUM, b.PART_NUM as PD_ENQ_part_num , a.PARENT_GROUP as
+      PH_ENQ_PARENT_GROUP, a.DEALER_MAP_CD AS PH_ENQ_DEALER_MAP_CD, a.LOC_CD AS
+      PH_ENQ_LOC_CD, a.ENQ_NUM AS PH_ENQ_ENQ_NUM, A.ENQ_SOURCE AS
+      PH_ENQ_ENQ_SOURCE, A.CUST_REMARKS AS  PH_ENQ_CUST_REMARKS, A.ENQ_MODE AS
+      PH_ENQ_ENQ_MOD, A.INVOICE_NUM AS PH_ENQ_INVOICE_NUM, A.INVOICE_DATE AS
+      PH_ENQ_INVOICE_DATE, A.ENQ_DATE AS PH_ENQ_ENQ_DATE, a.CUST_STATE AS
+      PH_ENQ_CUST_STATE from PD_ISSUE c LEFT JOIN PD_ENQ b  ON
+      concat_ws('|',c.PARENT_GROUP,c.DEALER_MAP_CD,c.LOC_CD,c.DOC_NUM,c.PART_NUM)
+      =
+      concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.INVOICE_NUM,b.PART_NUM)
+      LEFT JOIN PH_ENQ a  ON
+      concat_ws('|',a.PARENT_GROUP,a.DEALER_MAP_CD,a.LOC_CD,a.ENQ_NUM) =
+      concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.ENQ_NUM)  WHERE
+      LEFT(a.ENQ_NUM,3)= 'ACC'
+    sequenceNo: 4
+    references:
+      - alias: PD_ISSUE_1
+        sqlReference: PD_ISSUE
+      - alias: PH_ENQ_1
+        sqlReference: PH_ENQ
+      - alias: PD_ENQ_1
+        sqlReference: PD_ENQ
+controlPort:
+  dataQualityRules:
+    RecordCountCheck:
+      productState:
+        expression: ">="
+        number: 1
+        referenceAlias: Ingesting_data_into_athena
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
