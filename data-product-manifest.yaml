@@ -1,4 +1,4 @@
-version: 0.0.10
+version: 0.0.12
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -117,6 +117,18 @@ productState:
       PH_ENQ_CUST_STATE:
         type: STRING
         description: Customer state from ph enq
+      etl_inserted_date:
+        type: DATETIME
+        description: ETL pipeline data insert date
+      etl_modified_date:
+        type: DATETIME
+        description: ETL pipeline modification date
+      etl_created_by:
+        type: STRING
+        description: ETL pipeline created by
+      etl_updated_by:
+        type: STRING
+        description: ETL pipeline updated by
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -134,7 +146,7 @@ transformation:
   - alias: Spark_SQL_1
     type: SQL
     description: transformation logic for accessories sales
-    query: SELECT  c.item_value as item_value, c.PARENT_GROUP AS
+    query: SELECT distinct c.item_value as item_value, c.PARENT_GROUP AS
       PD_ISSUE_PARENT_GROUP, c.DEALER_MAP_CD AS PD_ISSUE_DEALER_MAP_CD, c.LOC_CD
       AS PD_ISSUE_LOC_CD, c.DOC_NUM AS PD_ISSUE_DOC_NUM, c.PART_NUM AS
       PD_ISSUE_PART_NUM, b.PARENT_GROUP AS PD_ENQ_PARENT_GROUP, b.DEALER_MAP_CD
@@ -145,7 +157,10 @@ transformation:
       PH_ENQ_ENQ_SOURCE, A.CUST_REMARKS AS  PH_ENQ_CUST_REMARKS, A.ENQ_MODE AS
       PH_ENQ_ENQ_MOD, A.INVOICE_NUM AS PH_ENQ_INVOICE_NUM, A.INVOICE_DATE AS
       PH_ENQ_INVOICE_DATE, A.ENQ_DATE AS PH_ENQ_ENQ_DATE, a.CUST_STATE AS
-      PH_ENQ_CUST_STATE from PD_ISSUE c LEFT JOIN PD_ENQ b  ON
+      PH_ENQ_CUST_STATE, current_timestamp() as etl_inserted_date,
+      current_timestamp() as etl_modified_date, 'platform_admin' as
+      etl_created_by, 'platform_admin' as etl_updated_by from PD_ISSUE c LEFT
+      JOIN PD_ENQ b  ON
       concat_ws('|',c.PARENT_GROUP,c.DEALER_MAP_CD,c.LOC_CD,c.DOC_NUM,c.PART_NUM)
       =
       concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.INVOICE_NUM,b.PART_NUM)
