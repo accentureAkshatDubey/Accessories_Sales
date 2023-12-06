@@ -1,4 +1,4 @@
-version: 0.0.26
+version: 0.0.30
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -6,18 +6,6 @@ alias: Ingesting_data_into_athena
 discoveryPort:
   name: Accessories Sales
 inputPorts:
-  - alias: PD_ISSUE_2
-    isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/full/pd_issue/
-    optional:
-      persistDataFrame: false
-      advanceOptions:
-        mergeSchema: "true"
-      enableDataReconciliation: false
-      enforceSchema: false
-      connection: Digital Sales S3 Connectivity
-      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
-    type: inputParquet
   - alias: PH_ENQ_2
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/ph_enq/
@@ -41,6 +29,18 @@ inputPorts:
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:7bf0bd5e-a850-4e34-8a8b-e8db98a05f33
+    type: inputParquet
+  - alias: PD_ISSUE_1
+    isDynamic: true
+    path: s3://msil-data-lake-raw/dms/muldms/transaction/full/pd_issue/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: "true"
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Digital Sales S3 Connectivity
+      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
     type: inputParquet
 productState:
   isDynamic: true
@@ -178,7 +178,7 @@ transformation:
         sqlReference: PH_ENQ
       - alias: PD_ENQ_2
         sqlReference: PD_ENQ
-      - alias: PD_ISSUE_2
+      - alias: PD_ISSUE_1
         sqlReference: PD_ISSUE
 controlPort:
   dataQualityRules:
