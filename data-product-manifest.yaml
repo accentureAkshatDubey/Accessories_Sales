@@ -1,4 +1,4 @@
-version: 0.0.30
+version: 0.0.31
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -12,7 +12,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -24,7 +24,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -36,7 +36,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -120,6 +120,21 @@ productState:
       PH_ENQ_CUST_STATE:
         type: STRING
         description: Customer state from ph enq
+      status:
+        type: STRING
+        description: Status from pd enq
+      enq_status:
+        type: STRING
+        description: enquiry status from ph enq
+      part_category:
+        type: STRING
+        description: part category from pd enq
+      PART_LMS_DATE:
+        type: DATETIME
+        description: Part lms date from ph enq
+      part_qty:
+        type: STRING
+        description: Part quantity from pd enq
       etl_inserted_date:
         type: DATETIME
         description: ETL pipeline data insert date
@@ -161,7 +176,9 @@ transformation:
       PH_ENQ_INVOICE_NUM, A.INVOICE_DATE AS PH_ENQ_INVOICE_DATE, A.ENQ_DATE AS
       PH_ENQ_ENQ_DATE, A.CUST_STATE AS PH_ENQ_CUST_STATE, A.CUST_PHONE AS
       PH_ENQ_CUST_PHONE, concat_ws(' ',A.CUST_FNAME,A.CUST_MNAME,A.CUST_LNAME)
-      AS PH_ENQ_CUST_NAME, A.CUST_REMARKS AS  PH_ENQ_CUST_REMARKS,
+      AS PH_ENQ_CUST_NAME, A.CUST_REMARKS AS  PH_ENQ_CUST_REMARKS, B.status AS
+      status, A.enq_status AS enq_status, B.part_category as part_category,
+      A.PART_LMS_DATE AS part_lms_date, B.part_qty as part_qty,
       current_timestamp() as etl_inserted_date, current_timestamp() as
       etl_modified_date, 'platform_admin' as etl_created_by, 'platform_admin' as
       etl_updated_by from PD_ISSUE c LEFT JOIN PD_ENQ b  ON
