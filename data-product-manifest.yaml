@@ -1,4 +1,4 @@
-version: 0.0.32
+version: 0.0.33
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -12,7 +12,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -24,7 +24,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -36,7 +36,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: "true"
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -181,7 +181,7 @@ transformation:
       A.PART_LMS_DATE AS part_lms_date, B.part_qty as part_qty,
       current_timestamp() as etl_inserted_date, current_timestamp() as
       etl_modified_date, 'platform_admin' as etl_created_by, 'platform_admin' as
-      etl_updated_by from PD_ENQ b LEFT JOIN PH_ENQ a  ON
+      etl_updated_by from PH_ENQ a  LEFT JOIN PD_ENQ b ON
       concat_ws('|',a.PARENT_GROUP,a.DEALER_MAP_CD,a.LOC_CD,a.ENQ_NUM) =
       concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.ENQ_NUM)  LEFT
       JOIN PD_ISSUE c ON
