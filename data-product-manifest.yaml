@@ -12,7 +12,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: "true"
+        mergeSchema: true
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -24,7 +24,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: "true"
+        mergeSchema: true
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -36,7 +36,7 @@ inputPorts:
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: "true"
+        mergeSchema: true
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
