@@ -1,4 +1,4 @@
-version: 0.0.60
+version: 0.0.61
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -206,7 +206,7 @@ transformation:
       ON concat (     c.PARENT_GROUP, '|', cast(c.DEALER_MAP_CD as
       string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
       concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
-      string,      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
+      string),      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
       b.PART_NUM   )  WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and
       lower(a.enq_mode) in ('web', 'order', 'orde','mwb')    and
       lower(a.CUST_REMARKS) not like '%suzuki%connet%'    and lower(cust_email)
