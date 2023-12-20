@@ -1,4 +1,4 @@
-version: 0.0.64
+version: 0.0.65
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -237,7 +237,7 @@ transformation:
       (     c.PARENT_GROUP,      '|',      cast(c.DEALER_MAP_CD as
       string),      '|',      c.LOC_CD,      '|',      c.DOC_NUM,      '|',      c.PART_NUM   )
       = concat (     b.PARENT_GROUP,      '|',      cast(       b.DEALER_MAP_CD
-      as string, '|', b.LOC_CD,        '|', b.INVOICE_NUM, '|',
+      as string), '|', b.LOC_CD,        '|', b.INVOICE_NUM, '|',
       b.PART_NUM     )      inner join pm_acc_catg_mast y on b.part_category =
       y.catg_type      inner join am_list x on a.enq_status =
       x.list_code      WHERE        LEFT(a.ENQ_NUM, 3) = 'ACC'        and
