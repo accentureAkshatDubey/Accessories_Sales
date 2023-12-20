@@ -1,4 +1,4 @@
-version: 0.0.65
+version: 0.0.66
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -202,7 +202,7 @@ transformation:
   - alias: Spark_SQL_1
     type: SQL
     description: transformation logic for accessories sales
-    query: SELECT    distinct c.item_value as item_value,    c.PARENT_GROUP AS
+    query: "SELECT    distinct c.item_value as item_value,    c.PARENT_GROUP AS
       PD_ISSUE_PARENT_GROUP,    c.DEALER_MAP_CD AS
       PD_ISSUE_DEALER_MAP_CD,    c.LOC_CD AS PD_ISSUE_LOC_CD,    c.DOC_NUM AS
       PD_ISSUE_DOC_NUM,    c.PART_NUM AS PD_ISSUE_PART_NUM,    b.PARENT_GROUP AS
@@ -235,17 +235,18 @@ transformation:
       string),      '|',      b.LOC_CD,      '|',      b.ENQ_NUM   )    inner
       JOIN PD_ISSUE c ON concat
       (     c.PARENT_GROUP,      '|',      cast(c.DEALER_MAP_CD as
-      string),      '|',      c.LOC_CD,      '|',      c.DOC_NUM,      '|',      c.PART_NUM   )
-      = concat (     b.PARENT_GROUP,      '|',      cast(       b.DEALER_MAP_CD
-      as string), '|', b.LOC_CD,        '|', b.INVOICE_NUM, '|',
+      string),      '|',      c.LOC_CD,      '|',      c.DOC_NUM,      '|',      \
+      c.PART_NUM   ) = concat
+      (     b.PARENT_GROUP,      '|',      cast(       b.DEALER_MAP_CD as
+      string), '|', b.LOC_CD,        '|', b.INVOICE_NUM, '|',
       b.PART_NUM     )      inner join pm_acc_catg_mast y on b.part_category =
       y.catg_type      inner join am_list x on a.enq_status =
       x.list_code      WHERE        LEFT(a.ENQ_NUM, 3) = 'ACC'        and
       lower(a.enq_mode) in ('web', 'order', 'orde', 'mwb')        and
       lower(a.CUST_REMARKS) not like '%suzuki%connet%'        and
       lower(cust_email) not in
-      (         '%@maruti.co.in',          '%@adglobal360.com'          and
-      x.LIST_NAME = 'ACC_HDR_ENQ_STATUS'       )
+      (         '%@maruti.co.in',          '%@adglobal360.com' ) and x.LIST_NAME
+      = 'ACC_HDR_ENQ_STATUS'   "
     sequenceNo: 8
     references:
       - alias: PH_ENQ_1
