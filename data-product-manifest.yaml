@@ -1,4 +1,4 @@
-version: 0.0.61
+version: 0.0.63
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -41,6 +41,30 @@ inputPorts:
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
+    type: inputParquet
+  - alias: PM_ACC_CATG_MAST__1
+    isDynamic: true
+    path: s3://msil-data-lake-raw/dms/muldms/master/full/pm_acc_catg_mast/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: true
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Digital Sales S3 Connectivity
+      dataSetUrn: urn:dv:dataset:86e13999-b4e3-4d6a-ba69-73bb4f7ff7d3
+    type: inputParquet
+  - alias: AM_LIST_1
+    isDynamic: true
+    path: s3://msil-data-lake-raw/dms/muldms/master/full/am_list/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: true
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Market Quality S3 Connectivity
+      dataSetUrn: urn:dv:dataset:cc3bbf9a-a967-4358-9b6f-6ffa5cf95cb6
     type: inputParquet
 productState:
   isDynamic: true
@@ -167,14 +191,14 @@ transformation:
     query: select DISTINCT
       item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
       as date_check from pd_issue_raw
-    sequenceNo: 4
+    sequenceNo: 6
     references:
       - alias: PD_ISSUE_1
         sqlReference: pd_issue_raw
   - alias: Refresh_Data_1
     type: ""
     description: Refresh PD_issue data
-    sequenceNo: 5
+    sequenceNo: 7
   - alias: Spark_SQL_1
     type: SQL
     description: transformation logic for accessories sales
@@ -194,8 +218,13 @@ transformation:
       (     ' ', A.CUST_FNAME, A.CUST_MNAME, A.CUST_LNAME   ) AS
       PH_ENQ_CUST_NAME,    a.CUST_REMARKS AS PH_ENQ_CUST_REMARKS,    b.status AS
       status,    a.enq_status AS enq_status,    b.part_category as
-      part_category,    a.PART_LMS_DATE AS part_lms_date,    b.part_qty as
-      part_qty,    current_timestamp() as
+      part_category,    a.PART_LMS_DATE AS
+      Parts_First_Followup_Date,    b.part_qty as
+      part_qty,    a.ENQ_ORDERREADINESS_DATE as
+      Order_Readiness_Date,   x.list_desc as header_status,   y.CATG_DESC as
+      Product_Category,   b.PART_QTY as Parts_Enquiry_Quantity,    x.list_desc
+      as Line_wise_status,   a.part_num as Part num
+      enquired,   current_timestamp() as
       etl_inserted_date,    current_timestamp() as
       etl_modified_date,    'platform_admin' as
       etl_created_by,    'platform_admin' as etl_updated_by  from    PH_ENQ
@@ -206,12 +235,14 @@ transformation:
       ON concat (     c.PARENT_GROUP, '|', cast(c.DEALER_MAP_CD as
       string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
       concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
-      string),      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
-      b.PART_NUM   )  WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and
-      lower(a.enq_mode) in ('web', 'order', 'orde','mwb')    and
-      lower(a.CUST_REMARKS) not like '%suzuki%connet%'    and lower(cust_email)
-      not in (     '%@maruti.co.in', '%@adglobal360.com'   )
-    sequenceNo: 6
+      string,      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
+      b.PART_NUM   )  inner join pm_acc_catg_mast y on b.part_category =
+      y.catg_type inner join am_list x on a.enq_status = x.list_code
+      WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and lower(a.enq_mode) in ('web',
+      'order', 'orde','mwb')    and lower(a.CUST_REMARKS) not like
+      '%suzuki%connet%'    and lower(cust_email) not in (     '%@maruti.co.in',
+      '%@adglobal360.com'   and x.LIST_NAME='ACC_HDR_ENQ_STATUS' )
+    sequenceNo: 8
     references:
       - alias: PH_ENQ_1
         sqlReference: PH_ENQ
@@ -219,6 +250,10 @@ transformation:
         sqlReference: PD_ENQ
       - alias: Refresh_Data_1
         sqlReference: PD_ISSUE
+      - alias: PM_ACC_CATG_MAST__1
+        sqlReference: PM_ACC_CATG_MAST
+      - alias: AM_LIST_1
+        sqlReference: AM_LIST
 controlPort:
   dataQualityRules:
     RecordCountCheck:
