@@ -1,4 +1,4 @@
-version: 0.0.34
+version: 0.0.59
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -6,7 +6,7 @@ alias: Ingesting_data_into_athena
 discoveryPort:
   name: Accessories Sales
 inputPorts:
-  - alias: PH_ENQ_2
+  - alias: PH_ENQ_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/ph_enq/
     optional:
@@ -18,7 +18,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:9e6f0763-1c4f-494f-bdbe-523a844d06f9
     type: inputParquet
-  - alias: PD_ENQ_2
+  - alias: PD_ENQ_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/pd_enq/
     optional:
@@ -32,11 +32,11 @@ inputPorts:
     type: inputParquet
   - alias: PD_ISSUE_1
     isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/full/pd_issue/
+    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
     optional:
       persistDataFrame: false
       advanceOptions:
-        mergeSchema: true
+        mergeSchema: false
       enableDataReconciliation: false
       enforceSchema: false
       connection: Digital Sales S3 Connectivity
@@ -161,41 +161,63 @@ productState:
     catalogType: glue
   refreshInterval: 0 10 * * *
 transformation:
+  - alias: Spark_SQL_2
+    type: SQL
+    description: Data Creation
+    query: select DISTINCT
+      item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
+      as date_check from pd_issue_raw
+    sequenceNo: 4
+    references:
+      - alias: PD_ISSUE_1
+        sqlReference: pd_issue_raw
+  - alias: Refresh_Data_1
+    type: ""
+    description: Refresh PD_issue data
+    sequenceNo: 5
   - alias: Spark_SQL_1
     type: SQL
     description: transformation logic for accessories sales
-    query: SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
-      PD_ISSUE_PARENT_GROUP, c.DEALER_MAP_CD AS PD_ISSUE_DEALER_MAP_CD, c.LOC_CD
-      AS PD_ISSUE_LOC_CD, c.DOC_NUM AS PD_ISSUE_DOC_NUM, c.PART_NUM AS
-      PD_ISSUE_PART_NUM, b.PARENT_GROUP AS PD_ENQ_PARENT_GROUP, b.DEALER_MAP_CD
-      AS PD_ENQ_DEALER_MAP_CD, b.LOC_CD AS PD_ENQ_LOC_CD, b.INVOICE_NUM AS
-      PD_ENQ_INVOICE_NUM, b.PART_NUM as PD_ENQ_part_num , a.PARENT_GROUP as
-      PH_ENQ_PARENT_GROUP, a.DEALER_MAP_CD AS PH_ENQ_DEALER_MAP_CD, a.LOC_CD AS
-      PH_ENQ_LOC_CD, a.ENQ_NUM AS PH_ENQ_ENQ_NUM, A.ENQ_SOURCE AS
-      PH_ENQ_ENQ_SOURCE, A.ENQ_MODE AS PH_ENQ_ENQ_MOD, A.INVOICE_NUM AS
-      PH_ENQ_INVOICE_NUM, A.INVOICE_DATE AS PH_ENQ_INVOICE_DATE, A.ENQ_DATE AS
-      PH_ENQ_ENQ_DATE, A.CUST_STATE AS PH_ENQ_CUST_STATE, A.CUST_PHONE AS
-      PH_ENQ_CUST_PHONE, concat_ws(' ',A.CUST_FNAME,A.CUST_MNAME,A.CUST_LNAME)
-      AS PH_ENQ_CUST_NAME, A.CUST_REMARKS AS  PH_ENQ_CUST_REMARKS, B.status AS
-      status, A.enq_status AS enq_status, B.part_category as part_category,
-      A.PART_LMS_DATE AS part_lms_date, B.part_qty as part_qty,
-      current_timestamp() as etl_inserted_date, current_timestamp() as
-      etl_modified_date, 'platform_admin' as etl_created_by, 'platform_admin' as
-      etl_updated_by from PD_ENQ b  LEFT JOIN PH_ENQ a  ON
-      concat_ws('|',a.PARENT_GROUP,a.DEALER_MAP_CD,a.LOC_CD,a.ENQ_NUM) =
-      concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.ENQ_NUM)  LEFT
-      JOIN PD_ISSUE c ON
-      concat_ws('|',c.PARENT_GROUP,c.DEALER_MAP_CD,c.LOC_CD,c.DOC_NUM,c.PART_NUM)
-      =
-      concat_ws('|',b.PARENT_GROUP,b.DEALER_MAP_CD,b.LOC_CD,b.INVOICE_NUM,b.PART_NUM)
-      WHERE LEFT(a.ENQ_NUM,3)= 'ACC'
-    sequenceNo: 4
+    query: SELECT    distinct c.item_value as item_value,    c.PARENT_GROUP AS
+      PD_ISSUE_PARENT_GROUP,    c.DEALER_MAP_CD AS
+      PD_ISSUE_DEALER_MAP_CD,    c.LOC_CD AS PD_ISSUE_LOC_CD,    c.DOC_NUM AS
+      PD_ISSUE_DOC_NUM,    c.PART_NUM AS PD_ISSUE_PART_NUM,    b.PARENT_GROUP AS
+      PD_ENQ_PARENT_GROUP,    b.DEALER_MAP_CD AS
+      PD_ENQ_DEALER_MAP_CD,    b.LOC_CD AS PD_ENQ_LOC_CD,    b.INVOICE_NUM AS
+      PD_ENQ_INVOICE_NUM,    b.PART_NUM as PD_ENQ_part_num,    a.PARENT_GROUP as
+      PH_ENQ_PARENT_GROUP,    a.DEALER_MAP_CD AS
+      PH_ENQ_DEALER_MAP_CD,    a.LOC_CD AS PH_ENQ_LOC_CD,    a.ENQ_NUM AS
+      PH_ENQ_ENQ_NUM,    a.ENQ_SOURCE AS PH_ENQ_ENQ_SOURCE,    a.ENQ_MODE AS
+      PH_ENQ_ENQ_MOD,    a.INVOICE_NUM AS PH_ENQ_INVOICE_NUM,    a.INVOICE_DATE
+      AS PH_ENQ_INVOICE_DATE,    a.ENQ_DATE AS PH_ENQ_ENQ_DATE,    a.CUST_STATE
+      AS PH_ENQ_CUST_STATE,    a.CUST_PHONE AS PH_ENQ_CUST_PHONE,    concat_ws
+      (     ' ', A.CUST_FNAME, A.CUST_MNAME, A.CUST_LNAME   ) AS
+      PH_ENQ_CUST_NAME,    a.CUST_REMARKS AS PH_ENQ_CUST_REMARKS,    b.status AS
+      status,    a.enq_status AS enq_status,    b.part_category as
+      part_category,    a.PART_LMS_DATE AS part_lms_date,    b.part_qty as
+      part_qty,    current_timestamp() as
+      etl_inserted_date,    current_timestamp() as
+      etl_modified_date,    'platform_admin' as
+      etl_created_by,    'platform_admin' as etl_updated_by  from    PH_ENQ
+      a    inner JOIN PD_ENQ b ON concat (     a.PARENT_GROUP, '|',
+      cast(a.DEALER_MAP_CD as string),      '|', a.LOC_CD, '|', a.ENQ_NUM   ) =
+      concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
+      string),      '|', b.LOC_CD, '|', b.ENQ_NUM   )    inner JOIN PD_ISSUE c
+      ON concat (     c.PARENT_GROUP, '|', cast(c.DEALER_MAP_CD as
+      string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
+      concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
+      string,      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
+      b.PART_NUM   )  WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and
+      lower(a.enq_mode) in ('web', 'order', 'orde')    and lower(a.CUST_REMARKS)
+      != 'suzuki connet'    and lower(cust_email) not in (     '%@maruti.co.in',
+      '%@adglobal360.com'   )
+    sequenceNo: 6
     references:
-      - alias: PH_ENQ_2
+      - alias: PH_ENQ_1
         sqlReference: PH_ENQ
-      - alias: PD_ENQ_2
+      - alias: PD_ENQ_1
         sqlReference: PD_ENQ
-      - alias: PD_ISSUE_1
+      - alias: Refresh_Data_1
         sqlReference: PD_ISSUE
 controlPort:
   dataQualityRules:
