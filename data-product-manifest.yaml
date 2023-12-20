@@ -188,9 +188,9 @@ transformation:
   - alias: Spark_SQL_2
     type: SQL
     description: Data Creation
-    query: select DISTINCT
+    query: "select DISTINCT
       item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
-      as date_check from pd_issue_raw
+      as date_check from pd_issue_raw"
     sequenceNo: 6
     references:
       - alias: PD_ISSUE_1
