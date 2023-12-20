@@ -1,4 +1,4 @@
-version: 0.0.67
+version: 0.0.68
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -174,8 +174,8 @@ productState:
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
-  tableName: msil_transformed_layer.Accessories_Sales
-  warehousePath: s3://dlp-platform-engine-bucket/
+  tableName: msil_dataverse_marketing_and_sales_catalog.Accessories_Sales
+  warehousePath: s3://msil-dataverse-marketing-and-sales/
   catalogName: glue
   optional:
     persistDataFrame: false
