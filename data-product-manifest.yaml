@@ -1,4 +1,4 @@
-version: 0.0.73
+version: 0.0.77
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -183,8 +183,8 @@ productState:
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
-  tableName: msil_dataverse_marketing_and_sales_catalog.Accessories_Sales
-  warehousePath: s3://msil-dataverse-marketing-and-sales/
+  tableName: msil_transformed_layer.Accessories_Sales
+  warehousePath: s3://dlp-platform-engine-bucket/
   catalogName: glue
   optional:
     persistDataFrame: false
@@ -246,8 +246,8 @@ transformation:
       string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
       concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
       string),      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
-      b.PART_NUM   )  inner join pm_acc_catg_mast y on b.part_category =
-      y.catg_type inner join am_list x on a.enq_status = x.list_code
+      b.PART_NUM   )  left join pm_acc_catg_mast y on b.part_category =
+      y.catg_type left join am_list x on a.enq_status = x.list_code
       WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and lower(a.enq_mode) in ('web',
       'order', 'orde','mwb')    and lower(a.CUST_REMARKS) not like
       '%suzuki%connet%'    and lower(cust_email) not in (     '%@maruti.co.in',
