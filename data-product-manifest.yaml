@@ -44,7 +44,7 @@ inputPorts:
     type: inputParquet
   - alias: PD_ISSUE_1
     isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
+    path: s3://msil-data-lake-raw/dms/muldms/transaction/incremental/pd_issue/
     optional:
       persistDataFrame: false
       advanceOptions:
