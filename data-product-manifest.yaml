@@ -1,4 +1,4 @@
-version: 0.0.78
+version: 0.0.82
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -238,10 +238,10 @@ transformation:
       etl_inserted_date,    current_timestamp() as
       etl_modified_date,    'platform_admin' as
       etl_created_by,    'platform_admin' as etl_updated_by from    PH_ENQ
-      a    inner JOIN PD_ENQ b ON concat (     a.PARENT_GROUP, '|',
+      a    INNER JOIN PD_ENQ b ON concat (     a.PARENT_GROUP, '|',
       cast(a.DEALER_MAP_CD as string),      '|', a.LOC_CD, '|', a.ENQ_NUM   ) =
       concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
-      string),      '|', b.LOC_CD, '|', b.ENQ_NUM   )    inner JOIN PD_ISSUE c
+      string),      '|', b.LOC_CD, '|', b.ENQ_NUM   )    INNER JOIN PD_ISSUE c
       ON concat (     c.PARENT_GROUP, '|', cast(c.DEALER_MAP_CD as
       string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
       concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
@@ -251,7 +251,7 @@ transformation:
       WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and lower(a.enq_mode) in ('web',
       'order', 'orde','mwb')    and lower(a.CUST_REMARKS) not like
       '%suzuki%connet%'    and lower(cust_email) not in (     '%@maruti.co.in',
-      '%@adglobal360.com'   )
+      '%@adglobal360.com'   )  and x.LIST_NAME='ACC_HDR_ENQ_STATUS'
     sequenceNo: 8
     references:
       - alias: PH_ENQ
