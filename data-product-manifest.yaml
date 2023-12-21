@@ -1,4 +1,4 @@
-version: 0.0.72
+version: 0.0.73
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -211,9 +211,9 @@ transformation:
   - alias: Accessories_sales_query
     type: SQL
     description: transformation logic for accessories sales
-    query: SELECT    distinct c.item_value as item_value,    c.item_value as
-      item_value,    c.PARENT_GROUP AS Parent_Group_pd_issue,   b.PARENT_GROUP
-      AS Parent_Group_pd_enq,   a.PARENT_GROUP as
+    query: SELECT    distinct  c.item_value as item_value,    c.PARENT_GROUP AS
+      Parent_Group_pd_issue,   b.PARENT_GROUP AS
+      Parent_Group_pd_enq,   a.PARENT_GROUP as
       Parent_Group_ph_enq,      c.DEALER_MAP_CD AS
       Dealer_Map_Code_pd_issue,    b.DEALER_MAP_CD AS
       Dealer_Map_Code_pd_enq,    a.DEALER_MAP_CD AS
