@@ -1,4 +1,4 @@
-version: 0.0.68
+version: 0.0.69
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -6,7 +6,7 @@ alias: Ingesting_data_into_athena
 discoveryPort:
   name: Accessories Sales
 inputPorts:
-  - alias: PH_ENQ_1
+  - alias: PH_ENQ
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/ph_enq/
     optional:
@@ -18,7 +18,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:9e6f0763-1c4f-494f-bdbe-523a844d06f9
     type: inputParquet
-  - alias: PD_ENQ_1
+  - alias: PD_ENQ
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/pd_enq/
     optional:
@@ -30,7 +30,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:7bf0bd5e-a850-4e34-8a8b-e8db98a05f33
     type: inputParquet
-  - alias: PD_ISSUE_1
+  - alias: PD_ISSUE
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
     optional:
@@ -42,7 +42,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
     type: inputParquet
-  - alias: PM_ACC_CATG_MAST__1
+  - alias: PM_ACC_CATG_MAST
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/pm_acc_catg_mast/
     optional:
@@ -54,7 +54,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:86e13999-b4e3-4d6a-ba69-73bb4f7ff7d3
     type: inputParquet
-  - alias: AM_LIST_1
+  - alias: AM_LIST
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/am_list/
     optional:
@@ -75,88 +75,97 @@ productState:
       item_value:
         type: STRING
         description: item value
-      PD_ISSUE_PARENT_GROUP:
+      Parent_Group_pd_issue:
         type: STRING
         description: Parent group from pd issue
-      PD_ISSUE_DEALER_MAP_CD:
-        type: STRING
-        description: Dealer map code from pd issue
-      PD_ISSUE_LOC_CD:
-        type: STRING
-        description: location code from pd issue
-      PD_ISSUE_DOC_NUM:
-        type: STRING
-        description: Doc number from pd_issue
-      PD_ISSUE_PART_NUM:
-        type: STRING
-        description: Part number from pd issue
-      PD_ENQ_PARENT_GROUP:
+      Parent_Group_pd_enq:
         type: STRING
         description: Parent group from pd_enq
-      PD_ENQ_DEALER_MAP_CD:
-        type: STRING
-        description: Dealer map code from pd_enq
-      PD_ENQ_LOC_CD:
-        type: STRING
-        description: Location code from pd enq
-      PD_ENQ_INVOICE_NUM:
-        type: STRING
-        description: Invoice number from pd enq
-      PD_ENQ_part_num:
-        type: STRING
-        description: Part number from pd enq
-      PH_ENQ_PARENT_GROUP:
+      Parent_Group_ph_enq:
         type: STRING
         description: Parent group from ph enq
-      PH_ENQ_DEALER_MAP_CD:
+      Dealer_Map_Code_pd_issue:
+        type: STRING
+        description: Dealer map code from pd issue
+      Dealer_Map_Code_pd_enq:
+        type: STRING
+        description: Dealer map code from pd_enq
+      Dealer_Map_Code_ph_enq:
         type: STRING
         description: Dealer Map Code from ph enq
-      PH_ENQ_LOC_CD:
+      Location_Code_pd_issue:
+        type: STRING
+        description: location code from pd issue
+      Location_Code_pd_enq:
+        type: STRING
+        description: Location code from pd enq
+      Location_Code_ph_enq:
         type: STRING
         description: Location code from ph enq
-      PH_ENQ_ENQ_NUM:
+      Document_Number_pd_issue:
         type: STRING
-        description: Enquiry number from ph enq
-      PH_ENQ_ENQ_SOURCE:
+        description: Doc number from pd_issue
+      Part_Number_pd_issue:
         type: STRING
-        description: Enquiry source from ph_enq
-      PH_ENQ_ENQ_MOD:
+        description: Part number from pd issue
+      Part_Number_pd_enq:
         type: STRING
-        description: Enquiry mode from ph enq
-      PH_ENQ_INVOICE_NUM:
+        description: Part number from pd enq
+      Invoice_Number_pd_enq:
+        type: STRING
+        description: Invoice number from pd enq
+      Invoice_Number_ph_enq:
         type: STRING
         description: Invoice number from ph enq
-      PH_ENQ_INVOICE_DATE:
+      Enquiry_Number_ph_enq:
+        type: STRING
+        description: Enquiry number from ph enq
+      Enquiry_Source:
+        type: STRING
+        description: Enquiry source from ph_enq
+      Mode_Of_Enquiry:
+        type: STRING
+        description: Enquiry mode from ph enq
+      Invoice_Date_ph_enq:
         type: DATETIME
         description: Invoice date from ph enq
-      PH_ENQ_ENQ_DATE:
+      Enquiry_Date:
         type: DATETIME
         description: Enquiry date from ph enq
-      PH_ENQ_CUST_REMARKS:
+      Customer_Remarks:
         type: STRING
         description: Customer remarks from ph enq
-      PH_ENQ_CUST_PHONE:
+      Customer_Phone:
         type: STRING
         description: Customer phone number from ph enq
-      PH_ENQ_CUST_NAME:
+      Customer_Name:
         type: STRING
         description: Customer name from ph enq
-      PH_ENQ_CUST_STATE:
+      Customer_State:
         type: STRING
         description: Customer state from ph enq
       status:
         type: STRING
         description: Status from pd enq
-      enq_status:
+      Enquiry_Status:
         type: STRING
         description: enquiry status from ph enq
-      part_category:
+      Part_Category:
         type: STRING
         description: part category from pd enq
-      PART_LMS_DATE:
+      Parts_First_Followup_Date:
         type: DATETIME
         description: Part lms date from ph enq
-      part_qty:
+      Parts_Quantity:
+        type: STRING
+        description: Part quantity from pd enq
+      Order_Readiness_Date:
+        type: STRING
+        description: part category from pd enq
+      header_status:
+        type: DATETIME
+        description: Part lms date from ph enq
+      Product_Category:
         type: STRING
         description: Part quantity from pd enq
       etl_inserted_date:
@@ -185,24 +194,24 @@ productState:
     catalogType: glue
   refreshInterval: 0 10 * * *
 transformation:
-  - alias: Spark_SQL_2
+  - alias: pd_issue_columns
     type: SQL
     description: Data Creation
-    query: "select DISTINCT
+    query: select DISTINCT
       item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
-      as date_check from pd_issue_raw"
+      as date_check from pd_issue_raw
     sequenceNo: 6
     references:
-      - alias: PD_ISSUE_1
+      - alias: PD_ISSUE
         sqlReference: pd_issue_raw
-  - alias: Refresh_Data_1
+  - alias: Refresh_pd_issue_data
     type: ""
     description: Refresh PD_issue data
     sequenceNo: 7
-  - alias: Spark_SQL_1
+  - alias: Accessories_sales_query
     type: SQL
     description: transformation logic for accessories sales
-    query: "SELECT    distinct c.item_value as item_value,    c.PARENT_GROUP AS
+    query: SELECT    distinct c.item_value as item_value,    c.PARENT_GROUP AS
       PD_ISSUE_PARENT_GROUP,    c.DEALER_MAP_CD AS
       PD_ISSUE_DEALER_MAP_CD,    c.LOC_CD AS PD_ISSUE_LOC_CD,    c.DOC_NUM AS
       PD_ISSUE_DOC_NUM,    c.PART_NUM AS PD_ISSUE_PART_NUM,    b.PARENT_GROUP AS
@@ -242,18 +251,18 @@ transformation:
       'ACC'    and lower(a.enq_mode) in ('web', 'order', 'orde', 'mwb')    and
       lower(a.CUST_REMARKS) not like '%suzuki%connet%'    and lower(cust_email)
       not in (     '%@maruti.co.in', '%@adglobal360.com'   )    and x.LIST_NAME
-      = 'ACC_HDR_ENQ_STATUS'"
+      = 'ACC_HDR_ENQ_STATUS'
     sequenceNo: 8
     references:
-      - alias: PH_ENQ_1
+      - alias: PH_ENQ
         sqlReference: PH_ENQ
-      - alias: PD_ENQ_1
+      - alias: PD_ENQ
         sqlReference: PD_ENQ
-      - alias: Refresh_Data_1
+      - alias: Refresh_pd_issue_data
         sqlReference: PD_ISSUE
-      - alias: PM_ACC_CATG_MAST__1
+      - alias: PM_ACC_CATG_MAST
         sqlReference: PM_ACC_CATG_MAST
-      - alias: AM_LIST_1
+      - alias: AM_LIST
         sqlReference: AM_LIST
 controlPort:
   dataQualityRules:
