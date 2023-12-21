@@ -1,4 +1,4 @@
-version: 0.0.82
+version: 0.0.83
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -6,7 +6,7 @@ alias: Ingesting_data_into_athena
 discoveryPort:
   name: Accessories Sales
 inputPorts:
-  - alias: PH_ENQ
+  - alias: PH_ENQ_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/ph_enq/
     optional:
@@ -18,7 +18,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:9e6f0763-1c4f-494f-bdbe-523a844d06f9
     type: inputParquet
-  - alias: PD_ENQ
+  - alias: PD_ENQ_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/pd_enq/
     optional:
@@ -30,19 +30,7 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:7bf0bd5e-a850-4e34-8a8b-e8db98a05f33
     type: inputParquet
-  - alias: PD_ISSUE
-    isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
-    optional:
-      persistDataFrame: false
-      advanceOptions:
-        mergeSchema: false
-      enableDataReconciliation: false
-      enforceSchema: false
-      connection: Digital Sales S3 Connectivity
-      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
-    type: inputParquet
-  - alias: PM_ACC_CATG_MAST
+  - alias: PM_ACC_CATG_MAST__1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/pm_acc_catg_mast/
     optional:
@@ -54,7 +42,19 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:86e13999-b4e3-4d6a-ba69-73bb4f7ff7d3
     type: inputParquet
-  - alias: AM_LIST
+  - alias: PD_ISSUE_1
+    isDynamic: true
+    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: true
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Digital Sales S3 Connectivity
+      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
+    type: inputParquet
+  - alias: AM_LIST_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/am_list/
     optional:
@@ -202,7 +202,7 @@ transformation:
       as date_check from pd_issue_raw
     sequenceNo: 6
     references:
-      - alias: PD_ISSUE
+      - alias: PD_ISSUE_1
         sqlReference: pd_issue_raw
   - alias: Refresh_pd_issue_data
     type: ""
@@ -254,16 +254,16 @@ transformation:
       '%@adglobal360.com'   )  and x.LIST_NAME='ACC_HDR_ENQ_STATUS'
     sequenceNo: 8
     references:
-      - alias: PH_ENQ
-        sqlReference: PH_ENQ
-      - alias: PD_ENQ
-        sqlReference: PD_ENQ
       - alias: Refresh_pd_issue_data
         sqlReference: PD_ISSUE
-      - alias: PM_ACC_CATG_MAST
-        sqlReference: PM_ACC_CATG_MAST
-      - alias: AM_LIST
+      - alias: AM_LIST_1
         sqlReference: AM_LIST
+      - alias: PH_ENQ_1
+        sqlReference: PH_ENQ
+      - alias: PD_ENQ_1
+        sqlReference: PD_ENQ
+      - alias: PM_ACC_CATG_MAST__1
+        sqlReference: PM_ACC_CATG_MAST
 controlPort:
   dataQualityRules:
     RecordCountCheck:
