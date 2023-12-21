@@ -1,4 +1,4 @@
-version: 0.0.77
+version: 0.0.78
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -251,7 +251,7 @@ transformation:
       WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and lower(a.enq_mode) in ('web',
       'order', 'orde','mwb')    and lower(a.CUST_REMARKS) not like
       '%suzuki%connet%'    and lower(cust_email) not in (     '%@maruti.co.in',
-      '%@adglobal360.com'   )  and x.LIST_NAME='ACC_HDR_ENQ_STATUS'
+      '%@adglobal360.com'   )
     sequenceNo: 8
     references:
       - alias: PH_ENQ
