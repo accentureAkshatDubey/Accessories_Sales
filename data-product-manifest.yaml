@@ -1,4 +1,4 @@
-version: 0.0.83
+version: 0.0.84
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -44,7 +44,7 @@ inputPorts:
     type: inputParquet
   - alias: PD_ISSUE_1
     isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/incremental/pd_issue/
+    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -211,47 +211,40 @@ transformation:
   - alias: Accessories_sales_query
     type: SQL
     description: transformation logic for accessories sales
-    query: "SELECT    distinct  c.item_value as item_value,    c.PARENT_GROUP AS
-      Parent_Group_pd_issue,   b.PARENT_GROUP AS
-      Parent_Group_pd_enq,   a.PARENT_GROUP as
-      Parent_Group_ph_enq,      c.DEALER_MAP_CD AS
-      Dealer_Map_Code_pd_issue,    b.DEALER_MAP_CD AS
-      Dealer_Map_Code_pd_enq,    a.DEALER_MAP_CD AS
-      Dealer_Map_Code_ph_enq,    c.LOC_CD AS Location_Code_pd_issue,    b.LOC_CD
-      AS Location_Code_pd_enq,    a.LOC_CD AS Location_Code_ph_enq,   c.DOC_NUM
-      AS Document_Number_pd_issue,    c.PART_NUM AS
-      Part_Number_pd_issue,    b.PART_NUM as
-      Part_Number_pd_enq,    b.INVOICE_NUM AS
-      Invoice_Number_pd_enq,    a.INVOICE_NUM AS
-      Invoice_Number_ph_enq,    a.ENQ_NUM AS
-      Enquiry_Number_ph_enq,    a.ENQ_SOURCE AS Enquiry_Source,    a.ENQ_MODE AS
-      Mode_Of_Enquiry,    a.INVOICE_DATE AS Invoice_Date_ph_enq,    a.ENQ_DATE
-      AS Enquiry_Date,    a.CUST_STATE AS Customer_State,    a.CUST_PHONE AS
-      Customer_Phone,    concat_ws (     ' ', A.CUST_FNAME, A.CUST_MNAME,
-      A.CUST_LNAME   ) AS Customer_Name,    a.CUST_REMARKS AS
-      Customer_Remarks,    b.status AS status,    a.enq_status AS
-      Enquiry_Status,    b.part_category as part_category,    a.PART_LMS_DATE AS
-      Parts_First_Followup_Date,    b.part_qty as
+    query: SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
+      Parent_Group_pd_issue, b.PARENT_GROUP AS Parent_Group_pd_enq,
+      a.PARENT_GROUP as Parent_Group_ph_enq, c.DEALER_MAP_CD AS
+      Dealer_Map_Code_pd_issue, b.DEALER_MAP_CD AS Dealer_Map_Code_pd_enq,
+      a.DEALER_MAP_CD AS Dealer_Map_Code_ph_enq, c.LOC_CD AS
+      Location_Code_pd_issue, b.LOC_CD AS Location_Code_pd_enq, a.LOC_CD AS
+      Location_Code_ph_enq, c.DOC_NUM AS Document_Number_pd_issue, c.PART_NUM AS
+      Part_Number_pd_issue, b.PART_NUM as Part_Number_pd_enq, b.INVOICE_NUM AS
+      Invoice_Number_pd_enq, a.INVOICE_NUM AS Invoice_Number_ph_enq, a.ENQ_NUM
+      AS Enquiry_Number_ph_enq, a.ENQ_SOURCE AS Enquiry_Source, a.ENQ_MODE AS
+      Mode_Of_Enquiry, a.INVOICE_DATE AS Invoice_Date_ph_enq, a.ENQ_DATE AS
+      Enquiry_Date, a.CUST_STATE AS Customer_State, a.CUST_PHONE AS
+      Customer_Phone, concat_ws(' ', A.CUST_FNAME, A.CUST_MNAME, A.CUST_LNAME)
+      AS Customer_Name,a.CUST_REMARKS AS Customer_Remarks,b.status AS
+      status,a.enq_status AS Enquiry_Status,    b.part_category as
+      part_category,a.PART_LMS_DATE AS Parts_First_Followup_Date,b.part_qty as
       Parts_Enquiry_Quantity,    a.ENQ_ORDERREADINESS_DATE as
-      Order_Readiness_Date,   x.list_desc as header_status,   y.CATG_DESC as
-      Product_Category,   current_timestamp() as
-      etl_inserted_date,    current_timestamp() as
-      etl_modified_date,    'platform_admin' as
-      etl_created_by,    'platform_admin' as etl_updated_by from    PH_ENQ
-      a    INNER JOIN PD_ENQ b ON concat (     a.PARENT_GROUP, '|',
-      cast(a.DEALER_MAP_CD as string),      '|', a.LOC_CD, '|', a.ENQ_NUM   ) =
-      concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
-      string),      '|', b.LOC_CD, '|', b.ENQ_NUM   )    INNER JOIN PD_ISSUE c
-      ON concat (     c.PARENT_GROUP, '|', cast(c.DEALER_MAP_CD as
-      string),      '|', c.LOC_CD, '|', c.DOC_NUM, '|',      c.PART_NUM   ) =
-      concat (     b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD as
-      string),      '|', b.LOC_CD, '|', b.INVOICE_NUM,      '|',
-      b.PART_NUM   )  left join pm_acc_catg_mast y on b.part_category =
-      y.catg_type left join am_list x on a.enq_status = x.list_code
-      WHERE    LEFT(a.ENQ_NUM, 3) = 'ACC'    and lower(a.enq_mode) in ('web',
-      'order', 'orde','mwb')    and lower(a.CUST_REMARKS) not like
-      '%suzuki%connet%'    and lower(cust_email) not in (     '%@maruti.co.in',
-      '%@adglobal360.com'   )  and x.LIST_NAME='ACC_HDR_ENQ_STATUS'"
+      Order_Readiness_Date,x.list_desc as header_status,y.CATG_DESC as
+      Product_Category,current_timestamp() as
+      etl_inserted_date,current_timestamp() as
+      etl_modified_date,'platform_admin' as etl_created_by,'platform_admin' as
+      etl_updated_by from    PH_ENQ a    INNER JOIN PD_ENQ b ON
+      concat(a.PARENT_GROUP,'|',cast(a.DEALER_MAP_CD as string),'|',
+      a.LOC_CD,'|',a.ENQ_NUM) = concat(b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD
+      as string),'|', b.LOC_CD, '|', b.ENQ_NUM) INNER JOIN PD_ISSUE c ON
+      concat(c.PARENT_GROUP,'|', cast(c.DEALER_MAP_CD as string), '|', c.LOC_CD,
+      '|', c.DOC_NUM, '|', c.PART_NUM ) = concat(b.PARENT_GROUP, '|',
+      cast(b.DEALER_MAP_CD as string), '|', b.LOC_CD, '|', b.INVOICE_NUM, '|',
+      b.PART_NUM) left join pm_acc_catg_mast y on b.part_category = y.catg_type
+      left join am_list x on a.enq_status = x.list_code WHERE    LEFT(a.ENQ_NUM,
+      3) = 'ACC' and lower(a.enq_mode) in ('web', 'order', 'orde','mwb') and
+      lower(a.CUST_REMARKS) not like '%suzuki%connet%' and lower(cust_email) not
+      in ('%@maruti.co.in', '%@adglobal360.com') and
+      x.LIST_NAME='ACC_HDR_ENQ_STATUS'
     sequenceNo: 8
     references:
       - alias: Refresh_pd_issue_data
