@@ -1,4 +1,4 @@
-version: 0.0.86
+version: 0.0.87
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -200,14 +200,10 @@ transformation:
     query: select DISTINCT
       item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
       as date_check from pd_issue_raw
-    sequenceNo: 6
+    sequenceNo: 2
     references:
       - alias: PD_ISSUE_1
         sqlReference: pd_issue_raw
-  - alias: Refresh_pd_issue_data
-    type: ""
-    description: Refresh PD_issue data
-    sequenceNo: 7
   - alias: Spark_SQL_3
     type: SQL
     description: transformation logic for accessories sales
@@ -245,7 +241,7 @@ transformation:
       lower(a.CUST_REMARKS) not like '%suzuki%connet%' and lower(cust_email) not
       in ('%@maruti.co.in', '%@adglobal360.com') and
       x.LIST_NAME='ACC_HDR_ENQ_STATUS'
-    sequenceNo: 8
+    sequenceNo: 7
     references:
       - alias: PH_ENQ_1
         sqlReference: PH_ENQ
@@ -253,10 +249,10 @@ transformation:
         sqlReference: PD_ENQ
       - alias: PM_ACC_CATG_MAST__1
         sqlReference: PM_ACC_CATG_MAST
-      - alias: Refresh_pd_issue_data
-        sqlReference: PD_ISSUE
       - alias: AM_LIST_1
         sqlReference: AM_LIST
+      - alias: pd_issue_columns
+        sqlReference: PD_ISSUE
 controlPort:
   dataQualityRules:
     RecordCountCheck:
