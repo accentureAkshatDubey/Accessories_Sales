@@ -1,4 +1,4 @@
-version: 0.0.85
+version: 0.0.86
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -208,7 +208,7 @@ transformation:
     type: ""
     description: Refresh PD_issue data
     sequenceNo: 7
-  - alias: Accessories_sales_query
+  - alias: Spark_SQL_3
     type: SQL
     description: transformation logic for accessories sales
     query: SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
@@ -247,16 +247,16 @@ transformation:
       x.LIST_NAME='ACC_HDR_ENQ_STATUS'
     sequenceNo: 8
     references:
-      - alias: Refresh_pd_issue_data
-        sqlReference: PD_ISSUE
-      - alias: AM_LIST_1
-        sqlReference: AM_LIST
       - alias: PH_ENQ_1
         sqlReference: PH_ENQ
       - alias: PD_ENQ_1
         sqlReference: PD_ENQ
       - alias: PM_ACC_CATG_MAST__1
         sqlReference: PM_ACC_CATG_MAST
+      - alias: Refresh_pd_issue_data
+        sqlReference: PD_ISSUE
+      - alias: AM_LIST_1
+        sqlReference: AM_LIST
 controlPort:
   dataQualityRules:
     RecordCountCheck:
