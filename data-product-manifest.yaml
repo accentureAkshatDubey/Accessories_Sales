@@ -1,4 +1,4 @@
-version: 0.0.87
+version: 0.0.88
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -42,18 +42,6 @@ inputPorts:
       connection: Digital Sales S3 Connectivity
       dataSetUrn: urn:dv:dataset:86e13999-b4e3-4d6a-ba69-73bb4f7ff7d3
     type: inputParquet
-  - alias: PD_ISSUE_1
-    isDynamic: true
-    path: s3://msil-data-lake-raw/dms/muldms/transaction/*/pd_issue/pd_issue_2023_*.parquet
-    optional:
-      persistDataFrame: false
-      advanceOptions:
-        mergeSchema: true
-      enableDataReconciliation: false
-      enforceSchema: false
-      connection: Digital Sales S3 Connectivity
-      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
-    type: inputParquet
   - alias: AM_LIST_1
     isDynamic: true
     path: s3://msil-data-lake-raw/dms/muldms/master/full/am_list/
@@ -65,6 +53,18 @@ inputPorts:
       enforceSchema: false
       connection: Market Quality S3 Connectivity
       dataSetUrn: urn:dv:dataset:cc3bbf9a-a967-4358-9b6f-6ffa5cf95cb6
+    type: inputParquet
+  - alias: PD_ISSUE_1
+    isDynamic: true
+    path: s3://msil-data-lake-raw/InputData/Digital_sales/pd_issue_consumption_file/parquet/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        mergeSchema: true
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Digital Sales S3 Connectivity
+      dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
     type: inputParquet
 productState:
   isDynamic: true
@@ -194,16 +194,6 @@ productState:
     catalogType: glue
   refreshInterval: 0 10 * * *
 transformation:
-  - alias: pd_issue_columns
-    type: SQL
-    description: Data Creation
-    query: select DISTINCT
-      item_value,PART_NUM,DOC_TYPE,LOC_CD,COMP_FA,DOC_NUM,SRL_NUM,PARENT_GROUP,DEALER_MAP_CD,nvl(modified_date,created_date)
-      as date_check from pd_issue_raw
-    sequenceNo: 2
-    references:
-      - alias: PD_ISSUE_1
-        sqlReference: pd_issue_raw
   - alias: Spark_SQL_3
     type: SQL
     description: transformation logic for accessories sales
@@ -241,7 +231,7 @@ transformation:
       lower(a.CUST_REMARKS) not like '%suzuki%connet%' and lower(cust_email) not
       in ('%@maruti.co.in', '%@adglobal360.com') and
       x.LIST_NAME='ACC_HDR_ENQ_STATUS'
-    sequenceNo: 7
+    sequenceNo: 6
     references:
       - alias: PH_ENQ_1
         sqlReference: PH_ENQ
@@ -251,7 +241,7 @@ transformation:
         sqlReference: PM_ACC_CATG_MAST
       - alias: AM_LIST_1
         sqlReference: AM_LIST
-      - alias: pd_issue_columns
+      - alias: PD_ISSUE_1
         sqlReference: PD_ISSUE
 controlPort:
   dataQualityRules:
