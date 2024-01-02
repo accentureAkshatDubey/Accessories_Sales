@@ -1,4 +1,4 @@
-version: 0.0.88
+version: 0.0.93
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -197,7 +197,7 @@ transformation:
   - alias: Spark_SQL_3
     type: SQL
     description: transformation logic for accessories sales
-    query: SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
+    query: "SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
       Parent_Group_pd_issue, b.PARENT_GROUP AS Parent_Group_pd_enq,
       a.PARENT_GROUP as Parent_Group_ph_enq, c.DEALER_MAP_CD AS
       Dealer_Map_Code_pd_issue, b.DEALER_MAP_CD AS Dealer_Map_Code_pd_enq,
@@ -218,19 +218,19 @@ transformation:
       Product_Category,current_timestamp() as
       etl_inserted_date,current_timestamp() as
       etl_modified_date,'platform_admin' as etl_created_by,'platform_admin' as
-      etl_updated_by from    PH_ENQ a    INNER JOIN PD_ENQ b ON
+      etl_updated_by from    PH_ENQ a inner JOIN PD_ENQ b ON
       concat(a.PARENT_GROUP,'|',cast(a.DEALER_MAP_CD as string),'|',
       a.LOC_CD,'|',a.ENQ_NUM) = concat(b.PARENT_GROUP, '|', cast(b.DEALER_MAP_CD
-      as string),'|', b.LOC_CD, '|', b.ENQ_NUM) INNER JOIN PD_ISSUE c ON
+      as string),'|', b.LOC_CD, '|', b.ENQ_NUM) inner JOIN PD_ISSUE c ON
       concat(c.PARENT_GROUP,'|', cast(c.DEALER_MAP_CD as string), '|', c.LOC_CD,
       '|', c.DOC_NUM, '|', c.PART_NUM ) = concat(b.PARENT_GROUP, '|',
       cast(b.DEALER_MAP_CD as string), '|', b.LOC_CD, '|', b.INVOICE_NUM, '|',
       b.PART_NUM) left join pm_acc_catg_mast y on b.part_category = y.catg_type
-      left join am_list x on a.enq_status = x.list_code WHERE    LEFT(a.ENQ_NUM,
-      3) = 'ACC' and lower(a.enq_mode) in ('web', 'order', 'orde','mwb') and
-      lower(a.CUST_REMARKS) not like '%suzuki%connet%' and lower(cust_email) not
-      in ('%@maruti.co.in', '%@adglobal360.com') and
-      x.LIST_NAME='ACC_HDR_ENQ_STATUS'
+      left join am_list x on a.enq_status = x.list_code and
+      x.LIST_NAME='ACC_HDR_ENQ_STATUS'  WHERE LEFT(a.ENQ_NUM, 3) = 'ACC' and
+      lower(a.enq_mode) in ('web', 'order', 'orde','mwb') and (a.CUST_REMARKS is
+      null or lower(a.CUST_REMARKS) not like '%suzuki%connet%') and
+      lower(cust_email) not in ('%@maruti.co.in', '%@adglobal360.com') "
     sequenceNo: 6
     references:
       - alias: PH_ENQ_1
