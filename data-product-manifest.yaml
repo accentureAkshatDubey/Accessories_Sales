@@ -1,4 +1,4 @@
-version: 0.0.93
+version: 0.0.96
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -56,14 +56,14 @@ inputPorts:
     type: inputParquet
   - alias: PD_ISSUE_1
     isDynamic: true
-    path: s3://msil-data-lake-raw/InputData/Digital_sales/pd_issue_consumption_file/parquet/
+    path: s3://msil-dataverse-marketing-and-sales/Dataset_Output/PD_ISSUE/Consumption_file/parquet/
     optional:
       persistDataFrame: false
       advanceOptions:
         mergeSchema: true
       enableDataReconciliation: false
       enforceSchema: false
-      connection: Digital Sales S3 Connectivity
+      connection: msil-dataverse-marketing-and-sales
       dataSetUrn: urn:dv:dataset:4a3840bf-87c0-4455-a4ad-a280e7ab0b5d
     type: inputParquet
 productState:
@@ -183,8 +183,8 @@ productState:
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
-  tableName: msil_transformed_layer.Accessories_Sales
-  warehousePath: s3://dlp-platform-engine-bucket/
+  tableName: msil_dataverse_marketing_and_sales_catalog.Accessories_Sales
+  warehousePath: " s3://msil-dataverse-marketing-and-sales/"
   catalogName: glue
   optional:
     persistDataFrame: false
