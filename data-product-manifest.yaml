@@ -1,4 +1,4 @@
-version: 0.0.96
+version: 0.0.97
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -72,6 +72,11 @@ productState:
   retentionVersions: ""
   logicalSchema:
     properties:
+      columnname:
+        type: STRING
+        description: Description
+        sourceColumn: source column
+        sourceTable: source table
       item_value:
         type: STRING
         description: item value
