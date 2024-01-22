@@ -1,4 +1,4 @@
-version: 0.0.97
+version: 0.0.101
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -72,119 +72,186 @@ productState:
   retentionVersions: ""
   logicalSchema:
     properties:
-      columnname:
-        type: STRING
-        description: Description
-        sourceColumn: source column
-        sourceTable: source table
       item_value:
         type: STRING
         description: item value
+        sourceColumn: item_value
+        sourceTable: pd_issue
       Parent_Group_pd_issue:
         type: STRING
         description: Parent group from pd issue
+        sourceColumn: PD_ISSUE_PARENT_GROUP
+        sourceTable: pd_issue
       Parent_Group_pd_enq:
         type: STRING
         description: Parent group from pd_enq
+        sourceColumn: PD_ENQ_PARENT_GROUP
+        sourceTable: pd_enq
       Parent_Group_ph_enq:
         type: STRING
         description: Parent group from ph enq
+        sourceColumn: PH_ENQ_PARENT_GROUP
+        sourceTable: source table
       Dealer_Map_Code_pd_issue:
         type: STRING
         description: Dealer map code from pd issue
+        sourceColumn: PD_ISSUE_DEALER_MAP_CD
+        sourceTable: pd_issue
       Dealer_Map_Code_pd_enq:
         type: STRING
         description: Dealer map code from pd_enq
+        sourceColumn: PD_ENQ_DEALER_MAP_CD
+        sourceTable: pd_enq
       Dealer_Map_Code_ph_enq:
         type: STRING
         description: Dealer Map Code from ph enq
+        sourceColumn: PH_ENQ_DEALER_MAP_CD
+        sourceTable: ph_enq
       Location_Code_pd_issue:
         type: STRING
         description: location code from pd issue
+        sourceColumn: PD_ISSUE_LOC_CD
+        sourceTable: pd_issue
       Location_Code_pd_enq:
         type: STRING
         description: Location code from pd enq
+        sourceColumn: PD_ENQ_LOC_CD
+        sourceTable: pd_enq
       Location_Code_ph_enq:
         type: STRING
         description: Location code from ph enq
+        sourceColumn: PH_ENQ_LOC_CD
+        sourceTable: ph_enq
       Document_Number_pd_issue:
         type: STRING
         description: Doc number from pd_issue
+        sourceColumn: PD_ISSUE_DOC_NUM
+        sourceTable: pd_issue
       Part_Number_pd_issue:
         type: STRING
         description: Part number from pd issue
+        sourceColumn: PD_ISSUE_PART_NUM
+        sourceTable: pd_issue
       Part_Number_pd_enq:
         type: STRING
         description: Part number from pd enq
+        sourceColumn: PD_ENQ_part_num
+        sourceTable: pd_enq
       Invoice_Number_pd_enq:
         type: STRING
         description: Invoice number from pd enq
+        sourceColumn: PH_ENQ_INVOICE_NUM
+        sourceTable: pd_enq
       Invoice_Number_ph_enq:
         type: STRING
         description: Invoice number from ph enq
+        sourceColumn: PH_ENQ_INVOICE_NUM
+        sourceTable: ph_enq
       Enquiry_Number_ph_enq:
         type: STRING
         description: Enquiry number from ph enq
+        sourceColumn: PH_ENQ_ENQ_NUM
+        sourceTable: ph_enq
       Enquiry_Source:
         type: STRING
         description: Enquiry source from ph_enq
+        sourceColumn: PH_ENQ_ENQ_SOURCE
+        sourceTable: ph_enq
       Mode_Of_Enquiry:
         type: STRING
         description: Enquiry mode from ph enq
+        sourceColumn: PH_ENQ_ENQ_MOD
+        sourceTable: ph_enq
       Invoice_Date_ph_enq:
         type: DATETIME
         description: Invoice date from ph enq
+        sourceColumn: PH_ENQ_INVOICE_DATE
+        sourceTable: ph_enq
       Enquiry_Date:
         type: DATETIME
         description: Enquiry date from ph enq
+        sourceColumn: PH_ENQ_ENQ_DATE
+        sourceTable: ph_enq
       Customer_Remarks:
         type: STRING
         description: Customer remarks from ph enq
+        sourceColumn: PH_ENQ_CUST_REMARKS
+        sourceTable: ph_enq
       Customer_Phone:
         type: STRING
         description: Customer phone number from ph enq
+        sourceColumn: PH_ENQ_CUST_PHONE
+        sourceTable: ph_enq
       Customer_Name:
         type: STRING
         description: Customer name from ph enq
+        sourceColumn: PH_ENQ_CUST_NAME
+        sourceTable: ph_enq
       Customer_State:
         type: STRING
         description: Customer state from ph enq
+        sourceColumn: PH_ENQ_CUST_STATE
+        sourceTable: ph_enq
       status:
         type: STRING
         description: Status from pd enq
+        sourceColumn: status
+        sourceTable: pd_enq
       Enquiry_Status:
         type: STRING
         description: enquiry status from ph enq
+        sourceColumn: enq_status
+        sourceTable: ph_enq
       Part_Category:
         type: STRING
         description: part category from pd enq
+        sourceColumn: part_category
+        sourceTable: pd_enq
       Parts_First_Followup_Date:
         type: DATETIME
         description: Part lms date from ph enq
+        sourceColumn: part_lms_date
+        sourceTable: ph_enq
       Parts_Quantity:
         type: STRING
         description: Part quantity from pd enq
+        sourceColumn: part_qty
+        sourceTable: pd_enq
       Order_Readiness_Date:
         type: STRING
-        description: part category from pd enq
+        description: ENQ_ORDERREADINESS_DATE from ph enq
+        sourceColumn: ENQ_ORDERREADINESS_DATE
+        sourceTable: ph_enq
       header_status:
         type: DATETIME
-        description: Part lms date from ph enq
+        description: list_desc from am_list
+        sourceColumn: list_desc
+        sourceTable: am_list
       Product_Category:
         type: STRING
-        description: Part quantity from pd enq
+        description: CATG_DESC from pm_acc_catg_mast
+        sourceColumn: CATG_DESC
+        sourceTable: pm_acc_catg_mast
       etl_inserted_date:
         type: DATETIME
         description: ETL pipeline data insert date
+        sourceColumn: manual
+        sourceTable: manual
       etl_modified_date:
         type: DATETIME
         description: ETL pipeline modification date
+        sourceColumn: manual
+        sourceTable: manual
       etl_created_by:
         type: STRING
         description: ETL pipeline created by
+        sourceColumn: manual
+        sourceTable: manual
       etl_updated_by:
         type: STRING
         description: ETL pipeline updated by
+        sourceColumn: manual
+        sourceTable: manual
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
