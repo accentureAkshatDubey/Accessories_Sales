@@ -1,10 +1,10 @@
-version: 0.0.101
+version: 0.0.104
 jobId: "736"
-jobName: Accessories Sales
+jobName: "Enquiry, Issue and Sales Mapping - Accessories "
 jobType: Source Aligned Data Product
 alias: Ingesting_data_into_athena
 discoveryPort:
-  name: Accessories Sales
+  name: "Enquiry, Issue and Sales Mapping - Accessories "
 inputPorts:
   - alias: PH_ENQ_1
     isDynamic: true
@@ -325,4 +325,6 @@ controlPort:
 outputPort:
   subscriptionChannels:
     - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
       queryType: SQL
