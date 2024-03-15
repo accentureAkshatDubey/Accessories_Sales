@@ -1,7 +1,8 @@
-version: 0.0.104
+version: 0.0.105
 jobId: "736"
 jobName: "Enquiry, Issue and Sales Mapping - Accessories "
 jobType: Source Aligned Data Product
+domain: marketing_and_sales
 alias: Ingesting_data_into_athena
 discoveryPort:
   name: "Enquiry, Issue and Sales Mapping - Accessories "
@@ -264,11 +265,23 @@ productState:
     enforceSchema: false
     enforceSchemaMethod: Warning
     catalogType: glue
-  refreshInterval: 0 10 * * *
+  refreshInterval: 30 5 * * *
 transformation:
-  - alias: Spark_SQL_3
-    type: SQL
+  - isDynamic: true
+    alias: Spark_SQL_3
     description: transformation logic for accessories sales
+    sequence: 6
+    inputDataFrameList:
+      - inputDataFrame: PH_ENQ_1
+        tempViewName: PH_ENQ
+      - inputDataFrame: PD_ENQ_1
+        tempViewName: PD_ENQ
+      - inputDataFrame: PM_ACC_CATG_MAST__1
+        tempViewName: PM_ACC_CATG_MAST
+      - inputDataFrame: AM_LIST_1
+        tempViewName: AM_LIST
+      - inputDataFrame: PD_ISSUE_1
+        tempViewName: PD_ISSUE
     query: "SELECT distinct  c.item_value as item_value, c.PARENT_GROUP AS
       Parent_Group_pd_issue, b.PARENT_GROUP AS Parent_Group_pd_enq,
       a.PARENT_GROUP as Parent_Group_ph_enq, c.DEALER_MAP_CD AS
@@ -303,18 +316,9 @@ transformation:
       lower(a.enq_mode) in ('web', 'order', 'orde','mwb') and (a.CUST_REMARKS is
       null or lower(a.CUST_REMARKS) not like '%suzuki%connet%') and
       lower(cust_email) not in ('%@maruti.co.in', '%@adglobal360.com') "
-    sequenceNo: 6
-    references:
-      - alias: PH_ENQ_1
-        sqlReference: PH_ENQ
-      - alias: PD_ENQ_1
-        sqlReference: PD_ENQ
-      - alias: PM_ACC_CATG_MAST__1
-        sqlReference: PM_ACC_CATG_MAST
-      - alias: AM_LIST_1
-        sqlReference: AM_LIST
-      - alias: PD_ISSUE_1
-        sqlReference: PD_ISSUE
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
 controlPort:
   dataQualityRules:
     RecordCountCheck:
