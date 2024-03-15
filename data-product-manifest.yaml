@@ -1,11 +1,11 @@
-version: 0.0.105
+version: 0.0.106
 jobId: "736"
-jobName: "Enquiry, Issue and Sales Mapping - Accessories "
+jobName: Accessories Sales
 jobType: Source Aligned Data Product
 domain: marketing_and_sales
 alias: Ingesting_data_into_athena
 discoveryPort:
-  name: "Enquiry, Issue and Sales Mapping - Accessories "
+  name: Accessories Sales
 inputPorts:
   - alias: PH_ENQ_1
     isDynamic: true
