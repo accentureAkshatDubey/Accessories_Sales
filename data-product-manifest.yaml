@@ -1,4 +1,4 @@
-version: 0.0.106
+version: 0.0.107
 jobId: "736"
 jobName: Accessories Sales
 jobType: Source Aligned Data Product
@@ -254,7 +254,7 @@ productState:
         sourceColumn: manual
         sourceTable: manual
   stateStoreType: loadDataIceberg
-  isProfilingEnabled: false
+  isProfilingEnabled: true
   updateStrategy: Overwrite
   tableName: msil_dataverse_marketing_and_sales_catalog.Accessories_Sales
   warehousePath: " s3://msil-dataverse-marketing-and-sales/"
